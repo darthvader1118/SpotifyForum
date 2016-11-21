@@ -55,19 +55,19 @@ Comment.findAll({
 });
 
 
-//Displays created threads and liked threads on profile page
-//Passes two objects, one containing created threads and one containing liked threads to profile.handlebars
+//Displays profile info and created threads and liked threads on profile page
+//Passes three objects, one containing the user info, one containing created threads and one containing liked threads to profile.handlebars
 userID = req.params.id;
 var createdObject;
 var likedObject;
-var CurrentUser;
+var currentUser;
 
 User.findOne({where: { id: userID }})
 .then(function(result) {
-  CurrentUser = result;
+  currentUser = result;
 });
 
-likedObject = CurrentUser.getLiked(); //if there is a function writted in the user model to get an object of liked threads
+likedObject = currentUser.getLiked(); //if there is a function writted in the user model to get an object of liked threads
 
 Thread.findAll({
   where: {
@@ -76,7 +76,54 @@ Thread.findAll({
 }).then(function(result) {
   createdObject = result;
   res.render('profile', {
+    user: currentUser,
     created: createdObject,
     liked: likedObject
   })
 });
+
+
+//Adds a new user to the Users table when a user signs up
+var newUser = req.body;
+
+User.create({
+  name: newUser.name,
+  password: newUser.password,
+  email: newUser.email,
+  favoriteGenre: newUser.genre
+}).then(function(result) {
+  res.redirect('/index');
+});
+
+
+//Adds a new thread to the Threads table when a user posts a new playlist
+var newThread = req.body;
+
+Thread.create({
+  title: newThread.title,
+  userID: newThread.userID,
+  contents: newThread.contents,
+  genre: newThread.genre,
+  likes: 0,
+  createdDate:
+}).then(function(result) {
+  res.redirect('/threads/' + result.id);
+});
+
+
+//Adds a new comment to the Comments table when a user posts a comment
+var newComment = req.body;
+
+Comment.create({
+  userID: newComment.userID,
+  threadID: newComment.threadID,
+  contents: newComment.contents,
+  createdDate:
+}).then(function(result) {
+  res.redirect('/threads/' + newComment.threadID);
+});
+
+
+//Adds a like relationship to the Likes table when a user likes a thread
+
+currentUser.addLike(threadID); //if there is a function written in the user model to add a like relationship to the Like table

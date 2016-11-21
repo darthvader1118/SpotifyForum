@@ -16,6 +16,7 @@
     "express-handlebars": "^3.0.0",
     "handlebars": "^4.0.5",
     "method-override": "^2.3.5",
-    "mysql": "^2.10.2"
+    "mysql": "^2.10.2",
+    "sequelize": "^3.27.0"
   }
 }
