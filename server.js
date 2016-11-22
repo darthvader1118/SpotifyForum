@@ -3,9 +3,13 @@ var bodyParser = require('body-parser');
 var request = require('request'); // "Request" library
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
+var models = require('./models/');
+models.sequelize.sync({force: true});
 var app = express();
+
 //Serve static content for the app from the "public" directory in the application directory.
 app.use(express.static(__dirname + '/public'));
+
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -19,7 +23,7 @@ var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
   password : '',
-  database : ''
+  database : 'database_development'
 });
 
 connection.connect(function(err) {
