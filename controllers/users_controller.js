@@ -18,6 +18,7 @@ var Like = require('../models')["Like"];
 
 //Displays threads on home page where genre is selectedGenre
 //Passes an object containing all threads with the selected genre to home.handlebars
+  var selectedGenre = req.body.genre;
   Thread.findAll({
     where: {
       genre: selectedGenre
@@ -44,7 +45,7 @@ var Like = require('../models')["Like"];
 
   Comment.findAll({
     where: {
-      threadID: chosenID
+      ThreadId: chosenID
     }
   }).then(function(result) {
     commentsObject = result;
@@ -67,11 +68,11 @@ var Like = require('../models')["Like"];
     currentUser = result;
   });
 
-  likedObject = currentUser.getLiked(); //if there is a function writted in the user model to get an object of liked threads
+  likedObject = currentUser.getThreads(); //if there is a function writted in the user model to get an object of liked threads
 
   Thread.findAll({
     where: {
-      userID: userID
+      UserId: userID
     }
   }).then(function(result) {
     createdObject = result;
@@ -101,7 +102,7 @@ var Like = require('../models')["Like"];
 
   Thread.create({
     title: newThread.title,
-    userID: newThread.userID,
+    UserId: newThread.userID,
     contents: newThread.contents,
     genre: newThread.genre,
     likes: 0
@@ -114,14 +115,13 @@ var Like = require('../models')["Like"];
   var newComment = req.body;
 
   Comment.create({
-    userID: newComment.userID,
-    threadID: newComment.threadID,
-    contents: newComment.contents,
-    createdDate:
+    UserId: newComment.userID,
+    ThreadId: newComment.threadID,
+    contents: newComment.contents
   }).then(function(result) {
     res.redirect('/threads/' + newComment.threadID);
   });
 
 
 //Adds a like relationship to the Likes table when a user likes a thread
-  currentUser.addLike(threadID); //if there is a function written in the user model to add a like relationship to the Like table
+  currentUser.addThread(threadID); //if there is a function written in the user model to add a like relationship to the Like table
