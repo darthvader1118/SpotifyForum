@@ -76,8 +76,8 @@ app.get('/login', function(req, res) {
 });
 
 //Sample GET request
-app.get('/', function(req, res) {
-  
+app.get('/index:genre', function(req, res) {
+  var chosen = req.params.genre;
 });
 
 //Sample POST request
