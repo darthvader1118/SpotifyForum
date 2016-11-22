@@ -6,6 +6,10 @@ var cookieParser = require('cookie-parser');
 var models = require('./models/');
 models.sequelize.sync({force: true});
 var app = express();
+var client_id = 'abe793abff5d41309db47e9f17981f2b'; // Your client id
+var client_secret = 'a87564837ce64590a5446a7aebc6edc5'; // Your secret
+var redirect_uri = 'http://localhost:3000/callback'; // Your redirect uri
+
 
 //Serve static content for the app from the "public" directory in the application directory.
 app.use(express.static(__dirname + '/public'));
@@ -13,6 +17,16 @@ app.use(express.static(__dirname + '/public'));
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
+var SpotifyWebApi = require('spotify-web-api-node');
+ 
+// credentials are optional 
+var spotifyApi = new SpotifyWebApi({
+  clientId : client_id,
+  clientSecret : client_secret,
+  redirectUri : redirect_uri
+});
+
+//use spotifywebapi to get albums tracks playlists for keywords
 
 var exphbs = require('express-handlebars');
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
@@ -36,9 +50,6 @@ connection.connect(function(err) {
 });
 
 
-var client_id = 'abe793abff5d41309db47e9f17981f2b'; // Your client id
-var client_secret = 'a87564837ce64590a5446a7aebc6edc5'; // Your secret
-var redirect_uri = 'http://localhost:3000/callback'; // Your redirect uri
 
 /**
  * Generates a random string containing numbers and letters
@@ -82,6 +93,20 @@ app.get('/login', function(req, res) {
 //Sample GET request
 app.get('/index:genre', function(req, res) {
   var chosen = req.params.genre;
+  var state = generateRandomString(16);
+  res.cookie(stateKey, state);
+
+  // your application requests authorization
+  var scope = '';
+  res.redirect('https://accounts.spotify.com/authorize?' +
+    querystring.stringify({
+      response_type: 'code',
+      client_id: client_id,
+      scope: scope,
+      redirect_uri: redirect_uri,
+      state: state
+    }));
+
 });
 
 //Sample POST request
