@@ -38,17 +38,11 @@ var Like = require('../models')["Like"];
   Thread.findOne({
     where: {
       id: chosenID
-    }
+    },
+    include: [Comment]
   }).then(function(result) {
     threadObject = result;
-  });
-
-  Comment.findAll({
-    where: {
-      ThreadId: chosenID
-    }
-  }).then(function(result) {
-    commentsObject = result;
+    commentObject = result.Comments;  //Not sure if this is right
     res.render('thread', {
       thread: threadObject,
       comments: commentsObject
@@ -64,18 +58,16 @@ var Like = require('../models')["Like"];
   var currentUser;
 
   User.findOne({where: { id: userID }})
-  .then(function(result) {
-    currentUser = result;
-  });
-
-  likedObject = currentUser.getThreads(); //if there is a function writted in the user model to get an object of liked threads
-
-  Thread.findAll({
-    where: {
-      UserId: userID
-    }
-  }).then(function(result) {
-    createdObject = result;
+  .then(function(res1) {
+    currentUser = res1;
+    return User.getThreads({where: { UserId: userID }});  //Or this might be getLikedThreads
+  })
+  .then(function(res2) {
+    likedObject = res2;
+    return Thread.findAll({where: { UserId: userID }});
+  }) 
+  .then(function(res3) {
+    createdObject = res3;
     res.render('profile', {
       user: currentUser,
       created: createdObject,
