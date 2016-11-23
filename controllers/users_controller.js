@@ -116,4 +116,4 @@ var Like = require('../models')["Like"];
 
 
 //Adds a like relationship to the Likes table when a user likes a thread
-  currentUser.addThread(threadID); //if there is a function written in the user model to add a like relationship to the Like table
+  currentUser.addThread(threadID);  //This might be addLikedThread
