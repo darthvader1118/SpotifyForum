@@ -1,2 +1,3 @@
-# Express-MySQL-Handlebars-Template
-A template for an express server using a MySQL localhost connection and the handlebars file structure
+# Spotify Music Forum
+
+A forum where one can share playlists and users rate and comment on it 
