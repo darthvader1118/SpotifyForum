@@ -4,8 +4,13 @@ var request = require('request'); // "Request" library
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
 var models = require('./models/');
-models.sequelize.sync({force: true});
+// models.sequelize.sync({force: true});
 var app = express();
+
+
+
+
+
 var client_id = 'abe793abff5d41309db47e9f17981f2b'; // Your client id
 var client_secret = 'a87564837ce64590a5446a7aebc6edc5'; // Your secret
 var redirect_uri = 'http://localhost:3000/callback'; // Your redirect uri
@@ -13,6 +18,7 @@ var redirect_uri = 'http://localhost:3000/callback'; // Your redirect uri
 
 //Serve static content for the app from the "public" directory in the application directory.
 app.use(express.static(__dirname + '/public'));
+app.use(cookieParser());
 
 
 // parse application/x-www-form-urlencoded
@@ -22,9 +28,19 @@ var SpotifyWebApi = require('spotify-web-api-node');
 // credentials are optional 
 var spotifyApi = new SpotifyWebApi({
   clientId : client_id,
-  clientSecret : client_secret,
-  redirectUri : redirect_uri
+  clientSecret : client_secret
 });
+
+spotifyApi.clientCredentialsGrant()
+  .then(function(data) {
+    console.log('The access token expires in ' + data.body['expires_in']);
+    console.log('The access token is ' + data.body['access_token']);
+ 
+    // Save the access token so that it's used in future calls 
+    spotifyApi.setAccessToken(data.body['access_token']);
+  }, function(err) {
+        console.log('Something went wrong when retrieving an access token', err);
+  });
 
 //use spotifywebapi to get albums tracks playlists for keywords
 
@@ -32,22 +48,22 @@ var exphbs = require('express-handlebars');
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
-var mysql      = require('mysql');
-var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : '',
-  database : 'database_development'
-});
+// var mysql      = require('mysql');
+// var connection = mysql.createConnection({
+//   host     : 'localhost',
+//   user     : 'root',
+//   password : '',
+//   database : 'database_development'
+// });
 
-connection.connect(function(err) {
-  if (err) {
-    console.error('error connecting: ' + err.stack);
-    return;
-  };
+// connection.connect(function(err) {
+//   if (err) {
+//     console.error('error connecting: ' + err.stack);
+//     return;
+//   };
 
-  console.log('connected as id ' + connection.threadId);
-});
+//   console.log('connected as id ' + connection.threadId);
+// });
 
 
 
@@ -68,11 +84,9 @@ var generateRandomString = function(length) {
 
 var stateKey = 'spotify_auth_state';
 
-var app = express();
 
-app.use(express.static(__dirname + '/public'))
-   .use(cookieParser());
 
+//login authorization logic
 app.get('/login', function(req, res) {
 
   var state = generateRandomString(16);
@@ -90,28 +104,112 @@ app.get('/login', function(req, res) {
     }));
 });
 
-//Sample GET request
-app.get('/index:genre', function(req, res) {
+
+//gets top 5 playlists of search term
+app.get('/index/:genre', function(req, res) {
   var chosen = req.params.genre;
   var state = generateRandomString(16);
   res.cookie(stateKey, state);
 
   // your application requests authorization
-  var scope = '';
-  res.redirect('https://accounts.spotify.com/authorize?' +
-    querystring.stringify({
-      response_type: 'code',
-      client_id: client_id,
-      scope: scope,
-      redirect_uri: redirect_uri,
-      state: state
-    }));
+  spotifyApi.getPlaylistsForCategory(chosen, {
+      country: 'US',
+      limit : 5,
+      offset : 0
+    })
+  .then(function(data) {
+    console.log(data.body);
+    var playlist = data.body.playlists.items;
+    res.json(playlist);
+  }, function(err) {
+    console.log("Something went wrong!", err);
+  });
+
 
 });
 
+app.get('/cat', function(req, res) {
+spotifyApi.getCategories({
+  limit : 40,
+  offset : 0,
+  country: 'US'
+})
+.then(function(data){
+  console.log(data.body);
+  res.json(data.body);
+});
+
+//write sequelize code that will store all categories into database 
+})
+
+
+//redirect uri that takes in the login info passes if there or just fails 
+app.get('/callback', function(req, res) {
+
+  // your application requests refresh and access tokens
+  // after checking the state parameter
+
+  var code = req.query.code || null;
+  var state = req.query.state || null;
+  var storedState = req.cookies ? req.cookies[stateKey] : null;
+
+  if (state === null || state !== storedState) {
+    res.redirect('/#' +
+      querystring.stringify({
+        error: 'state_mismatch'
+      }));
+  } else {
+    res.clearCookie(stateKey);
+    var authOptions = {
+      url: 'https://accounts.spotify.com/api/token',
+      form: {
+        code: code,
+        redirect_uri: redirect_uri,
+        grant_type: 'authorization_code'
+      },
+      headers: {
+        'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
+      },
+      json: true
+    };
+
+    request.post(authOptions, function(error, response, body) {
+      if (!error && response.statusCode === 200) {
+
+        var access_token = body.access_token,
+            refresh_token = body.refresh_token;
+
+        var options = {
+          url: 'https://api.spotify.com/v1/me',
+          headers: { 'Authorization': 'Bearer ' + access_token },
+          json: true
+        };
+
+        // use the access token to access the Spotify Web API
+        request.get(options, function(error, response, body) {
+          console.log(body);
+        });
+
+        // we can also pass the token to the browser to make requests from there
+        res.redirect('/#' +
+          querystring.stringify({
+            access_token: access_token,
+            refresh_token: refresh_token
+          }));
+      } else {
+        res.redirect('/#' +
+          querystring.stringify({
+            error: 'invalid_token'
+          }));
+      }
+    });
+  }
+});
+
 //Sample POST request
-app.post('/', function(req, res) {
-  
+app.get('/', function(req, res) {
+  res.send("hello world")
+  //should be the index handlebar
 });
 
 var port = 3000;
