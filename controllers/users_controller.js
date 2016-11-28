@@ -70,7 +70,7 @@ router.get('/user/:id', function(req, res) {
   User.findOne({where: { id: userID }})
   .then(function(res1) {
     currentUser = res1;
-    return User.getThreads({where: { UserId: userID }});  //Or this might be getLikedThreads
+    return User.getThreads({where: { UserId: userID }, include: [Thread]});  //Or this might be getLikedThreads
   })
   .then(function(res2) {
     likedObject = res2;
@@ -133,5 +133,5 @@ router.post('/thread/:id/comment/create', function(req, res) {
 });
 
 
-//Adds a like relationship to the Likes table when a user likes a thread
+//Adds a like relationship to the Likes table when a user likes a threadc
   currentUser.addThread(threadID);  //This might be addLikedThread
