@@ -6,18 +6,25 @@ var Thread = require('../models')["Thread"];
 var Comment = require('../models')["Comment"];
 var Like = require('../models')["Like"];
 
+router.get('/', function(req, res) {
+  res.redirect('/index');
+});
 
 //Displays all threads on home page
 //Passes an object containing all threads to home.handlebars
+router.get('/index', function(req, res) {
   Thread.findAll({})
-    .then(function(result) {
-      var threadsObject = {threads: result};
-      res.render('home', threadsObject);
-    });
+  .then(function(result) {
+    var threadsObject = {threads: result};
+    res.render('home', threadsObject);
+  });
+});
 
 
 //Displays threads on home page where genre is selectedGenre
 //Passes an object containing all threads with the selected genre to home.handlebars
+router.get('/index/:genre', function(req, res) {
+  var selectedGenre = req.body.genre;
   Thread.findAll({
     where: {
       genre: selectedGenre
@@ -26,10 +33,12 @@ var Like = require('../models')["Like"];
     var threadsObject = {threads: result};
     res.render('home', threadsObject);
   });
+});
 
 
 //Displays thread contents and all comments on thread page
 //Passes two objects, one containing the thread and one containing that thread's comments to thread.handlebars
+router.get('/thread/:id', function(req, res) {
   chosenID = req.params.id;
   var threadObject;
   var commentsObject;
@@ -37,53 +46,49 @@ var Like = require('../models')["Like"];
   Thread.findOne({
     where: {
       id: chosenID
-    }
+    },
+    include: [Comment]
   }).then(function(result) {
     threadObject = result;
-  });
-
-  Comment.findAll({
-    where: {
-      threadID: chosenID
-    }
-  }).then(function(result) {
-    commentsObject = result;
+    commentObject = result.Comments;  //Not sure if this is right
     res.render('thread', {
       thread: threadObject,
       comments: commentsObject
     })
   });
+});
 
 
 //Displays profile info and created threads and liked threads on profile page
 //Passes three objects, one containing the user info, one containing created threads and one containing liked threads to profile.handlebars
+router.get('/user/:id', function(req, res) {
   userID = req.params.id;
   var createdObject;
   var likedObject;
   var currentUser;
 
   User.findOne({where: { id: userID }})
-  .then(function(result) {
-    currentUser = result;
-  });
-
-  likedObject = currentUser.getLiked(); //if there is a function writted in the user model to get an object of liked threads
-
-  Thread.findAll({
-    where: {
-      userID: userID
-    }
-  }).then(function(result) {
-    createdObject = result;
+  .then(function(res1) {
+    currentUser = res1;
+    return User.getThreads({where: { UserId: userID }, include: [Thread]});  //Or this might be getLikedThreads
+  })
+  .then(function(res2) {
+    likedObject = res2;
+    return Thread.findAll({where: { UserId: userID }});
+  }) 
+  .then(function(res3) {
+    createdObject = res3;
     res.render('profile', {
       user: currentUser,
       created: createdObject,
       liked: likedObject
     })
   });
+});
 
 
 //Adds a new user to the Users table when a user signs up
+router.post('/user/create', function(req, res) {
   var newUser = req.body;
 
   User.create({
@@ -94,34 +99,39 @@ var Like = require('../models')["Like"];
   }).then(function(result) {
     res.redirect('/index');
   });
+});
 
 
 //Adds a new thread to the Threads table when a user posts a new playlist
+router.post('/thread/create', function(req, res) {
   var newThread = req.body;
 
   Thread.create({
     title: newThread.title,
-    userID: newThread.userID,
+    UserId: newThread.userID,
     contents: newThread.contents,
     genre: newThread.genre,
     likes: 0
   }).then(function(result) {
     res.redirect('/threads/' + result.id);
   });
+});
 
 
 //Adds a new comment to the Comments table when a user posts a comment
+router.post('/thread/:id/comment/create', function(req, res) {
   var newComment = req.body;
+  var threadID = req.params.id;
 
   Comment.create({
-    userID: newComment.userID,
-    threadID: newComment.threadID,
-    contents: newComment.contents,
-    createdDate:
+    UserId: newComment.userID,
+    ThreadId: threadID,
+    contents: newComment.contents
   }).then(function(result) {
-    res.redirect('/threads/' + newComment.threadID);
+    res.redirect('/threads/' + threadID);
   });
+});
 
 
-//Adds a like relationship to the Likes table when a user likes a thread
-  currentUser.addLike(threadID); //if there is a function written in the user model to add a like relationship to the Like table
+//Adds a like relationship to the Likes table when a user likes a threadc
+  currentUser.addThread(threadID);  //This might be addLikedThread

@@ -9,6 +9,7 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: function(models) {
         User.belongsToMany(models.Thread, {through: 'UserLikes'});
+        User.hasMany(models.Thread);
       }
     }
   });
