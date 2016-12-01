@@ -4,8 +4,9 @@ var request = require('request'); // "Request" library
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
 var models = require('./models/');
-// models.sequelize.sync({force: true});
+models.sequelize.sync({force: true});
 var app = express();
+var path = require('path');
 
 
 
@@ -44,9 +45,9 @@ spotifyApi.clientCredentialsGrant()
 
 //use spotifywebapi to get albums tracks playlists for keywords
 
-var exphbs = require('express-handlebars');
-app.engine('handlebars', exphbs({defaultLayout: 'main'}));
-app.set('view engine', 'handlebars');
+// var exphbs = require('express-handlebars');
+// app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+// app.set('view engine', 'handlebars');
 
 // var mysql      = require('mysql');
 // var connection = mysql.createConnection({
@@ -84,7 +85,7 @@ var generateRandomString = function(length) {
 
 var stateKey = 'spotify_auth_state';
 
-
+var login = 0;
 
 //login authorization logic
 app.get('/login', function(req, res) {
@@ -102,6 +103,7 @@ app.get('/login', function(req, res) {
       redirect_uri: redirect_uri,
       state: state
     }));
+  login = 1;
 });
 
 
@@ -187,8 +189,22 @@ app.get('/callback', function(req, res) {
 
         // use the access token to access the Spotify Web API
         request.get(options, function(error, response, body) {
-          console.log(body);
-        });
+          res.cookie = body.id + ":" + body.uri;
+          console.log(res.cookie)
+          // User.findOne({ where: {name: body.id} }).then(function(project) {
+          //   if(project == null){
+          //     User.create({
+          //       name: body.id,
+          //       userUri: body.uri
+          //     })
+          //   }
+          //     else{
+          //       //add some stuff here
+
+          //     }
+          //   })
+            // project will be the first entry of the Projects table with the title 'aProject' || null
+          })
 
         // we can also pass the token to the browser to make requests from there
         res.redirect('/#' +
@@ -205,12 +221,20 @@ app.get('/callback', function(req, res) {
     });
   }
 });
+ 
 
 //Sample POST request
 app.get('/', function(req, res) {
-  res.send("hello world")
+  if(login == 1){
+  res.sendFile(path.join(__dirname+"/bootstrap/signup.html"));
   //should be the index handlebar
+  }
+  else{
+    res.redirect('/login');
+  }
 });
+
+
 
 var port = 3000;
 app.listen(port, function() {
