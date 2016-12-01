@@ -20,6 +20,10 @@ router.get('/index', function(req, res) {
   });
 });
 
+//Displays the post a thread form
+router.get('/post', function(req, res) {
+  res.render('post');
+});
 
 //Displays threads on home page where genre is selectedGenre
 //Passes an object containing all threads with the selected genre to home.handlebars
@@ -61,30 +65,30 @@ router.get('/thread/:id', function(req, res) {
 
 //Displays profile info and created threads and liked threads on profile page
 //Passes three objects, one containing the user info, one containing created threads and one containing liked threads to profile.handlebars
-router.get('/user/:id', function(req, res) {
-  userID = req.params.id;
-  var createdObject;
-  var likedObject;
-  var currentUser;
+// router.get('/user/:id', function(req, res) {
+//   userID = req.params.id;
+//   var createdObject;
+//   var likedObject;
+//   var currentUser;
 
-  User.findOne({where: { id: userID }})
-  .then(function(res1) {
-    currentUser = res1;
-    return User.getThreads({where: { UserId: userID }, include: [Thread]});  //Or this might be getLikedThreads
-  })
-  .then(function(res2) {
-    likedObject = res2;
-    return Thread.findAll({where: { UserId: userID }});
-  }) 
-  .then(function(res3) {
-    createdObject = res3;
-    res.render('profile', {
-      user: currentUser,
-      created: createdObject,
-      liked: likedObject
-    })
-  });
-});
+//   User.findOne({where: { id: userID }})
+//   .then(function(res1) {
+//     currentUser = res1;
+//     return User.getThreads({where: { UserId: userID }, include: [Thread]});  //Or this might be getLikedThreads
+//   })
+//   .then(function(res2) {
+//     likedObject = res2;
+//     return Thread.findAll({where: { UserId: userID }});
+//   }) 
+//   .then(function(res3) {
+//     createdObject = res3;
+//     res.render('profile', {
+//       user: currentUser,
+//       created: createdObject,
+//       liked: likedObject
+//     })
+//   });
+// });
 
 
 //Adds a new user to the Users table when a user signs up
@@ -93,9 +97,10 @@ router.post('/user/create', function(req, res) {
 
   User.create({
     name: newUser.name,
-    password: newUser.password,
-    email: newUser.email,
-    favoriteGenre: newUser.genre
+    // password: newUser.password,
+    // email: newUser.email,
+    // favoriteGenre: newUser.genre
+    userUri: newUser.uri
   }).then(function(result) {
     res.redirect('/index');
   });
@@ -111,9 +116,10 @@ router.post('/thread/create', function(req, res) {
     UserId: newThread.userID,
     contents: newThread.contents,
     genre: newThread.genre,
-    likes: 0
+    likes: 0,
+    threadUri: newThread.uri
   }).then(function(result) {
-    res.redirect('/threads/' + result.id);
+    res.redirect('/thread/' + result.id);
   });
 });
 
@@ -128,10 +134,10 @@ router.post('/thread/:id/comment/create', function(req, res) {
     ThreadId: threadID,
     contents: newComment.contents
   }).then(function(result) {
-    res.redirect('/threads/' + threadID);
+    res.redirect('/thread/' + threadID);
   });
 });
 
 
-//Adds a like relationship to the Likes table when a user likes a threadc
-  currentUser.addThread(threadID);  //This might be addLikedThread
+//Adds a like relationship to the Likes table when a user likes a thread
+  // currentUser.addThread(threadID);  //This might be addLikedThread

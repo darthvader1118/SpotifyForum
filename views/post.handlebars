@@ -1,0 +1,48 @@
+<!-- Banner -->
+<section id="banner">
+    <article id="main">
+        <header class="special container">
+            <span class="icon fa-envelope"></span>
+            <h2>Post a Playlist</h2>
+            <p>Give your playlist a name and description, then choose it from your account library</p>
+        </header>
+        <!-- One -->
+        <section class="wrapper style4 special container 75%">
+            <!-- Content -->
+            <div class="content">
+                <form action="thread/create" method="POST">
+                    <div class="row">
+                        <div class="12u">
+                            <input type="text" name="playlistName" placeholder="Playlist Name" style="color: grey" />
+                        </div>
+                    </div>
+                    <div class="row 50%">
+                        <div class="12u">
+                            <textarea name="playlistDescription" placeholder="Playlist Description" rows="2" style="color: grey"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="12u">
+                            <ul class="buttons">
+                                <li>
+                                    <input type="submit" class="special" value="Grab Playlist" style="background-color: grey; border: none" />
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="12u">
+                            <ul class="buttons">
+                                <li>
+                                    <input type="submit" class="special" value="Post" />
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </article>
+</section>

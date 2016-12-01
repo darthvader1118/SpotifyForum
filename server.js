@@ -45,9 +45,9 @@ spotifyApi.clientCredentialsGrant()
 
 //use spotifywebapi to get albums tracks playlists for keywords
 
-// var exphbs = require('express-handlebars');
-// app.engine('handlebars', exphbs({defaultLayout: 'main'}));
-// app.set('view engine', 'handlebars');
+var exphbs = require('express-handlebars');
+app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+app.set('view engine', 'handlebars');
 
 // var mysql      = require('mysql');
 // var connection = mysql.createConnection({
