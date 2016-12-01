@@ -1,0 +1,109 @@
+<!DOCTYPE HTML>
+<!--
+    Twenty by HTML5 UP
+    html5up.net | @ajlkn
+    Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+
+<head>
+    <title>TrackShare for Spotify</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <!-- Font Awesome -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
+    <!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
+</head>
+
+<!-- form for user posting thread -->
+
+
+<body class="index">
+    <div id="page-wrapper">
+        <!-- Header -->
+        <header id="header" class="alt">
+            <h1 id="logo"><a href="index.html">Track <span class="share" style="font-weight: 400;">Share</span></a></h1>
+            <nav id="nav">
+                <ul>
+                    <!-- <li><a href="signup.html" class="button">Sign Up</a></li> -->
+                    <li><a href="#" class="button">Log Out</a></li>
+                </ul>
+            </nav>
+        </header>
+        <!-- Banner -->
+        <section id="banner">
+            <article id="main">
+                <header class="special container">
+                    <span class="icon fa-envelope"></span>
+                    <h2>Post a Playlist</h2>
+                    <p>Give your playlist a name and description, then choose it from your account library</p>
+                </header>
+                <!-- One -->
+                <section class="wrapper style4 special container 75%">
+                    <!-- Content -->
+                    <div class="content">
+                        <form action="thread/create" method="POST">
+                            <div class="row">
+                                <div class="12u">
+                                    <input type="text" name="playlistName" placeholder="Playlist Name" style="color: grey" />
+                                </div>
+                            </div>
+                            <div class="row 50%">
+                                <div class="12u">
+                                    <textarea name="playlistDescription" placeholder="Playlist Description" rows="2" style="color: grey"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="12u">
+                                    <ul class="buttons">
+                                        <li>
+                                            <input type="submit" class="special" value="Grab Playlist" style="background-color: grey; border: none" />
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="12u">
+                                    <ul class="buttons">
+                                        <li>
+                                            <input type="submit" class="special" value="Post" />
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+            </article>
+        </section>
+        <!-- Footer -->
+        <footer id="footer">
+            <ul class="icons">
+                <li>
+                    <a href="https://github.com/darthvader1118/SpotifyForum.git"><img src="octocat.png" /></a>
+                </li>
+            </ul>
+            <ul class="copyright">
+                <li>&copy; <a href="#" style="text-decoration: none; "><span style="font-weight: 600;">Track</span> <span style="font-weight: 300;">Share</span></a> 2016</li>
+            </ul>
+        </footer>
+    </div>
+    <!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.dropotron.min.js"></script>
+    <script src="assets/js/jquery.scrolly.min.js"></script>
+    <script src="assets/js/jquery.scrollgress.min.js"></script>
+    <script src="assets/js/skel.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/search.js"></script>
+    <script src="moment.js"></script>
+</body>
+
+</html>
