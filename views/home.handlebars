@@ -1,0 +1,48 @@
+<!-- Banner -->
+<section id="banner">
+    <div class="inner">
+        <header>
+            <h2><span style="font-weight: 600;">Track</span> <span style="font-weight: 300;">Share</span></h2>
+        </header>
+        <p>A social forum to post
+            <br /> and discuss the music
+            <br /> that matters to you
+        </p>
+        <footer>
+            <ul class="buttons vertical">
+                <li><a href="#discover" class="button fit scrolly">Discover <span style="font-weight: 600;">Track</span> <span style="font-weight: 300;">Share</span></a></li>
+            </ul>
+        </footer>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+</section>
+<!-- CTA -->
+    <section id="cta">
+        <header>
+<article id="discover">
+            <h5>It's easy to get started with <span style="font-weight: 600;">Track</span> <span style="font-weight: 300;">Share</span>! Simply log-in with your Spotify account and talk music.</h5>
+            <h2><strong>Menu</strong></h2>
+            <p></p>
+        </header>
+        {{#each threads}}
+            <div>
+                <a href="/thread/{{this.id}}">{{this.title}} {{this.UserId}} {{this.genre}}</a>
+            </div>
+        {{/each}}
+        <footer>
+            <ul class="buttons">
+                <!-- <li><a href="#" class="button">Go to my profile</a></li> -->
+                <li><a href="/post" class="button">Post a Playlist</a></li>
+                <br>
+                <br>
+                <li>
+
+                </li>
+            </ul>
+            </ul>
+        </footer>
+    </section>
+</article>
