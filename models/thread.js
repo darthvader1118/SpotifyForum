@@ -4,7 +4,8 @@ module.exports = function(sequelize, DataTypes) {
     title: DataTypes.STRING,
     contents: DataTypes.STRING,
     genre: DataTypes.STRING,
-    likes: DataTypes.INTEGER
+    likes: DataTypes.INTEGER,
+    threadUri: DataTypes.STRING
   }, {
     classMethods: {
       associate: function(models) {
