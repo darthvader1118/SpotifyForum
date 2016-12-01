@@ -4,7 +4,7 @@ var router = express.Router();
 var User = require('../models')["User"];
 var Thread = require('../models')["Thread"];
 var Comment = require('../models')["Comment"];
-var Like = require('../models')["Like"];
+// var Like = require('../models')["Like"];
 
 router.get('/', function(req, res) {
   res.redirect('/index');
@@ -141,3 +141,5 @@ router.post('/thread/:id/comment/create', function(req, res) {
 
 //Adds a like relationship to the Likes table when a user likes a thread
   // currentUser.addThread(threadID);  //This might be addLikedThread
+
+  module.exports = router;

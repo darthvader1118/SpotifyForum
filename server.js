@@ -49,6 +49,9 @@ var exphbs = require('express-handlebars');
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
+var routes = require('./controllers/users_controller.js');
+app.use('/', routes);
+
 // var mysql      = require('mysql');
 // var connection = mysql.createConnection({
 //   host     : 'localhost',
@@ -224,15 +227,15 @@ app.get('/callback', function(req, res) {
  
 
 //Sample POST request
-app.get('/', function(req, res) {
-  if(login == 1){
-  res.sendFile(path.join(__dirname+"/bootstrap/signup.html"));
-  //should be the index handlebar
-  }
-  else{
-    res.redirect('/login');
-  }
-});
+// app.get('/', function(req, res) {
+//   if(login == 1){
+//   res.sendFile(path.join(__dirname+"/bootstrap/signup.html"));
+//   //should be the index handlebar
+//   }
+//   else{
+//     res.redirect('/login');
+//   }
+// });
 
 
 
