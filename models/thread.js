@@ -11,6 +11,7 @@ module.exports = function(sequelize, DataTypes) {
       associate: function(models) {
         Thread.belongsTo(models.User);
         Thread.belongsToMany(models.User, {through: 'UserLikes'});
+        Thread.hasMany(models.Comment);
       }
     }
   });
