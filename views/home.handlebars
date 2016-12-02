@@ -1,3 +1,4 @@
+{{> header}}
 <!-- Banner -->
 <section id="banner">
     <div class="inner">
@@ -23,16 +24,7 @@
     <section id="cta">
         <header>
 <article id="discover">
-            <h5>It's easy to get started with <span style="font-weight: 600;">Track</span> <span style="font-weight: 300;">Share</span>! Simply log-in with your Spotify account and talk music.</h5>
-            <h2><strong>Menu</strong></h2>
-            <p></p>
-        </header>
-        {{#each threads}}
-            <div>
-                <a href="/thread/{{this.id}}">{{this.title}} {{this.UserId}} {{this.genre}}</a>
-            </div>
-        {{/each}}
-        <footer>
+            {{#if userId}}
             <ul class="buttons">
                 <!-- <li><a href="#" class="button">Go to my profile</a></li> -->
                 <li><a href="/post" class="button">Post a Playlist</a></li>
@@ -42,6 +34,19 @@
 
                 </li>
             </ul>
+            {{else}}
+            <h5>It's easy to get started with <span style="font-weight: 600;">Track</span> <span style="font-weight: 300;">Share</span>! Simply log-in with your Spotify account and talk music.</h5>
+            {{!-- <h2><strong>Menu</strong></h2> --}}
+            {{!-- <p></p> --}}
+            {{/if}}
+        </header>
+        {{#each threads}}
+            <div>
+                <a href="/thread{{this.id}}">{{this.title}} {{this.User.displayName}} {{this.genre}}</a>
+            </div>
+        {{/each}}
+        <footer>
+            
             </ul>
         </footer>
     </section>

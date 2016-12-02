@@ -3,8 +3,11 @@
     <h1 id="logo"><a href="/index">Track <span class="share" style="font-weight: 400;">Share</span></a></h1>
     <nav id="nav">
         <ul>
-            <!-- <li><a href="signup.handlebars" class="button">Sign Up</a></li> -->
-            <li><a href="#" class="button">Log In To Spotify</a></li>
+            {{#if userId}}
+            <li><a href="/logout" class="button">Log Out</a></li>
+            {{else}}
+            <li><a href="/login" class="button">Log In To Spotify</a></li>
+            {{/if}}
         </ul>
     </nav>
 </header>

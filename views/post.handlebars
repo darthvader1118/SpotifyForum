@@ -1,3 +1,4 @@
+{{> header}}
 <!-- Banner -->
 <section id="banner">
     <article id="main">
@@ -13,21 +14,39 @@
                 <form action="thread/create" method="POST">
                     <div class="row">
                         <div class="12u">
-                            <input type="text" name="playlistName" placeholder="Playlist Name" style="color: grey" />
+                            <input type="text" name="title" placeholder="Playlist Name" style="color: grey" />
                         </div>
                     </div>
-                    <div class="row 50%">
+                    {{!-- <div class="row">
                         <div class="12u">
-                            <textarea name="playlistDescription" placeholder="Playlist Description" rows="2" style="color: grey"></textarea>
+                            <input type="text" name="userID" placeholder="User ID" style="color: grey" />
+                        </div>
+                    </div> --}}
+                    <input type="hidden" name="userID" value="{{userId}}">
+                    <div class="row">
+                        <div class="12u">
+                            <input type="textarea" name="contents" placeholder="Playlist Description" rows="2" style="color: grey"></textarea>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="12u">
+                            <input type="text" name="genre" placeholder="Playlist Genre" style="color: grey" />
+                        </div>
+                    </div>
+                    {{!-- <div class="row">
+                        <div class="12u">
+                            <input type="text" name="uri" placeholder="Temp" style="color: grey" />
+                        </div>
+                    </div> --}}
 
                     <div class="row">
                         <div class="12u">
                             <ul class="buttons">
-                                <li>
-                                    <input type="submit" class="special" value="Grab Playlist" style="background-color: grey; border: none" />
+                                {{#each playlists}}
+                                <li style="color: black">
+                                    <input type="radio" class="special" name="uri" value="{{this.uri}}" >{{this.name}}</input>
                                 </li>
+                                {{/each}}
                             </ul>
                         </div>
                     </div>

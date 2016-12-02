@@ -7,7 +7,12 @@ var models = require('./models/');
 models.sequelize.sync({force: true});
 var app = express();
 var path = require('path');
+var userId;
+var playlists;
 
+var User = require('./models')["User"];
+var Thread = require('./models')["Thread"];
+var Comment = require('./models')["Comment"];
 
 
 
@@ -39,6 +44,7 @@ spotifyApi.clientCredentialsGrant()
  
     // Save the access token so that it's used in future calls 
     spotifyApi.setAccessToken(data.body['access_token']);
+
   }, function(err) {
         console.log('Something went wrong when retrieving an access token', err);
   });
@@ -178,6 +184,12 @@ app.get('/callback', function(req, res) {
       json: true
     };
 
+
+    // var id = res.body.id;
+    // var uri = res.body.uri;
+    // res.cookie("id", id);
+    // console.log("User: " + req.user);
+
     request.post(authOptions, function(error, response, body) {
       if (!error && response.statusCode === 200) {
 
@@ -192,29 +204,50 @@ app.get('/callback', function(req, res) {
 
         // use the access token to access the Spotify Web API
         request.get(options, function(error, response, body) {
-          res.cookie = body.id + ":" + body.uri;
-          console.log(res.cookie)
-          // User.findOne({ where: {name: body.id} }).then(function(project) {
-          //   if(project == null){
-          //     User.create({
-          //       name: body.id,
-          //       userUri: body.uri
-          //     })
-          //   }
-          //     else{
-          //       //add some stuff here
-
-          //     }
-          //   })
+          userId = body.id;
+          // module.exports = userId;
+          // localStorage.setItem('UserId', userId);
+          // spotifyApi.getUserPlaylists(userId).then(function(result) {
+          //   playlists = result;
+          //   module.exports = playlists;
+          //   // console.log("Playlists: " + JSON.stringify(playlists));
+          // });
+          // res.cookie = body.id + ":" + body.uri;
+          // res.cookie('id', body.id);
+          // console.log("User: " + res.cookie);
+          User.findOne({ where: {id: body.id} }).then(function(project) {
+            if(project == null){
+              User.create({
+                id: body.id,
+                displayName: body.display_name,
+                userUri: body.uri
+              }).then(function(result) {
+                res.redirect('/#' +
+                querystring.stringify({
+                  access_token: access_token,
+                  refresh_token: refresh_token
+                }));
+              });
+            }
+              else{
+                //add some stuff here
+                res.redirect('/#' +
+                querystring.stringify({
+                  access_token: access_token,
+                  refresh_token: refresh_token
+                }));
+              }
+            })
             // project will be the first entry of the Projects table with the title 'aProject' || null
           })
 
         // we can also pass the token to the browser to make requests from there
-        res.redirect('/#' +
-          querystring.stringify({
-            access_token: access_token,
-            refresh_token: refresh_token
-          }));
+        // res.redirect('/#' +
+        //   querystring.stringify({
+        //     access_token: access_token,
+        //     refresh_token: refresh_token
+        //   }));
+
       } else {
         res.redirect('/#' +
           querystring.stringify({
@@ -238,8 +271,74 @@ app.get('/callback', function(req, res) {
 // });
 
 
+// app.get("/playlists", function(req,res){
+//   // console.log("Cookie:" + req.cookies);
+//  console.log("User: " + userId);
+// spotifyApi.getUserPlaylists('1227705456')
+//  .then(function(data) {
+//    console.log('Retrieved playlists', data.body);
+//    res.json(data.body.items);
+//  },function(err) {
+//    console.log('Something went wrong!', err);
+//  });
+// });
+
+
+//Displays the post a thread form
+app.get('/post', function(req, res) {
+  // console.log("Req object: " + req);
+  // console.log("Playlists: " + JSON.stringify(spotifyApi));
+  spotifyApi.getUserPlaylists(userId).then(function(result){
+
+    console.log("Playlists: " + JSON.stringify(result.body.items));
+    var playlists = result.body.items;
+    res.render('post', {userId: userId, playlists: playlists});  //object might not be correct
+  });
+  
+});
+
+//Displays all threads on home page
+//Passes an object containing all threads to home.handlebars
+app.get('/index', function(req, res) {
+  Thread.findAll({
+    include: User
+  }) //might need include statement for that Thread's User
+  .then(function(result) {
+    var threadsObject = {threads: result, userId: userId};
+    res.render('home', threadsObject); //call thread's user to get display name and pass that to Handlebars
+  });
+});
+
+//Displays thread contents and all comments on thread page
+//Passes two objects, one containing the thread and one containing that thread's comments to thread.handlebars
+app.get('/thread:id', function(req, res) {
+  chosenID = req.params.id;
+  var threadObject;
+  var commentsObject;
+
+  Thread.findOne({
+    where: {
+      id: chosenID
+    },
+    // include: {model: [Comment], include: User}
+    include: [{model: Comment, as: 'Comments', include: User}]
+  }).then(function(result) {
+    console.log(result);
+    threadObject = result;
+    console.log(JSON.stringify(result));
+    commentsObject = result.Comments;  //Not sure if this is right
+    res.render('thread', {
+      thread: threadObject,
+      comments: commentsObject,
+      userId: userId
+    })
+  });
+});
 
 var port = 3000;
 app.listen(port, function() {
   console.log('App listening on PORT: ' + port);
 });
+
+
+// module.exports = playlists;
