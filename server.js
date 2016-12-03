@@ -16,7 +16,7 @@ var Comment = require('./models')["Comment"];
 
 var client_id = 'abe793abff5d41309db47e9f17981f2b'; // Your client id
 var client_secret = 'a87564837ce64590a5446a7aebc6edc5'; // Your secret
-var redirect_uri = 'http://localhost:3000/callback'; // Your redirect uri
+var redirect_uri = 'http://trackshareproject.herokuapp.com/index'; // Your redirect uri
 
 
 //Serve static content for the app from the "public" directory in the application directory.
@@ -185,7 +185,7 @@ app.get('/callback', function(req, res) {
                 displayName: body.display_name,
                 userUri: body.uri
               }).then(function(result) {
-                res.redirect('http://trackshareproject.herokuapp.com/index/#' +
+                res.redirect('/#' +
                 querystring.stringify({
                   access_token: access_token,
                   refresh_token: refresh_token
@@ -194,7 +194,7 @@ app.get('/callback', function(req, res) {
             }
               else{
                 //add some stuff here
-                res.redirect('http://trackshareproject.herokuapp.com/index/#' +
+                res.redirect('/#' +
                 querystring.stringify({
                   access_token: access_token,
                   refresh_token: refresh_token
