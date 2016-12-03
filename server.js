@@ -7,7 +7,7 @@ var models = require('./models/');
 models.sequelize.sync({force: true});
 var app = express();
 var path = require('path');
-var userId;
+var userId = "";
 var playlists;
 
 var User = require('./models')["User"];
@@ -16,7 +16,7 @@ var Comment = require('./models')["Comment"];
 
 var client_id = 'abe793abff5d41309db47e9f17981f2b'; // Your client id
 var client_secret = 'a87564837ce64590a5446a7aebc6edc5'; // Your secret
-var redirect_uri = 'http://localhost:3000/callback'; // Your redirect uri
+var redirect_uri = 'http://trackshareproject.herokuapp.com/callback'; // Your redirect uri
 
 
 //Serve static content for the app from the "public" directory in the application directory.
@@ -271,6 +271,12 @@ app.get('/thread:id', function(req, res) {
       userId: userId
     })
   });
+});
+
+//For logging out
+app.get('/logout', function(req, res) {
+  userId = "";
+  res.redirect('/index');
 });
 
 var port = process.env.PORT || 3000;
