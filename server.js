@@ -14,9 +14,6 @@ var User = require('./models')["User"];
 var Thread = require('./models')["Thread"];
 var Comment = require('./models')["Comment"];
 
-
-
-
 var client_id = 'abe793abff5d41309db47e9f17981f2b'; // Your client id
 var client_secret = 'a87564837ce64590a5446a7aebc6edc5'; // Your secret
 var redirect_uri = 'http://localhost:3000/callback'; // Your redirect uri
@@ -57,25 +54,6 @@ app.set('view engine', 'handlebars');
 
 var routes = require('./controllers/users_controller.js');
 app.use('/', routes);
-
-// var mysql      = require('mysql');
-// var connection = mysql.createConnection({
-//   host     : 'localhost',
-//   user     : 'root',
-//   password : '',
-//   database : 'database_development'
-// });
-
-// connection.connect(function(err) {
-//   if (err) {
-//     console.error('error connecting: ' + err.stack);
-//     return;
-//   };
-
-//   console.log('connected as id ' + connection.threadId);
-// });
-
-
 
 /**
  * Generates a random string containing numbers and letters
@@ -184,12 +162,6 @@ app.get('/callback', function(req, res) {
       json: true
     };
 
-
-    // var id = res.body.id;
-    // var uri = res.body.uri;
-    // res.cookie("id", id);
-    // console.log("User: " + req.user);
-
     request.post(authOptions, function(error, response, body) {
       if (!error && response.statusCode === 200) {
 
@@ -205,16 +177,7 @@ app.get('/callback', function(req, res) {
         // use the access token to access the Spotify Web API
         request.get(options, function(error, response, body) {
           userId = body.id;
-          // module.exports = userId;
-          // localStorage.setItem('UserId', userId);
-          // spotifyApi.getUserPlaylists(userId).then(function(result) {
-          //   playlists = result;
-          //   module.exports = playlists;
-          //   // console.log("Playlists: " + JSON.stringify(playlists));
-          // });
-          // res.cookie = body.id + ":" + body.uri;
-          // res.cookie('id', body.id);
-          // console.log("User: " + res.cookie);
+          
           User.findOne({ where: {id: body.id} }).then(function(project) {
             if(project == null){
               User.create({
@@ -241,6 +204,7 @@ app.get('/callback', function(req, res) {
             // project will be the first entry of the Projects table with the title 'aProject' || null
           })
 
+        // Moved to Sequelize promise so that the redirect would recognize the user
         // we can also pass the token to the browser to make requests from there
         // res.redirect('/#' +
         //   querystring.stringify({
@@ -257,32 +221,6 @@ app.get('/callback', function(req, res) {
     });
   }
 });
- 
-
-//Sample POST request
-// app.get('/', function(req, res) {
-//   if(login == 1){
-//   res.sendFile(path.join(__dirname+"/bootstrap/signup.html"));
-//   //should be the index handlebar
-//   }
-//   else{
-//     res.redirect('/login');
-//   }
-// });
-
-
-// app.get("/playlists", function(req,res){
-//   // console.log("Cookie:" + req.cookies);
-//  console.log("User: " + userId);
-// spotifyApi.getUserPlaylists('1227705456')
-//  .then(function(data) {
-//    console.log('Retrieved playlists', data.body);
-//    res.json(data.body.items);
-//  },function(err) {
-//    console.log('Something went wrong!', err);
-//  });
-// });
-
 
 //Displays the post a thread form
 app.get('/post', function(req, res) {
@@ -335,10 +273,7 @@ app.get('/thread:id', function(req, res) {
   });
 });
 
-var port = 3000;
+var port = process.env.PORT || 3000;
 app.listen(port, function() {
   console.log('App listening on PORT: ' + port);
 });
-
-
-// module.exports = playlists;
