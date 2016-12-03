@@ -16,7 +16,7 @@ var Comment = require('./models')["Comment"];
 
 var client_id = 'abe793abff5d41309db47e9f17981f2b'; // Your client id
 var client_secret = 'a87564837ce64590a5446a7aebc6edc5'; // Your secret
-var redirect_uri = 'http://trackshareproject.herokuapp.com/index'; // Your redirect uri
+var redirect_uri = 'http://trackshareproject.herokuapp.com/callback'; // Your redirect uri
 
 
 //Serve static content for the app from the "public" directory in the application directory.
