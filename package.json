@@ -1,14 +1,14 @@
 {
-  "name": "Express-MySQL-Handlebars-Template",
+  "name": "TrackShare",
   "version": "1.0.0",
-  "description": "A template for an express server using a MySQL localhost connection and the handlebars file structure",
+  "description": "A forum for users to share, download and comment on Spotify playlists",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Tyler Geerdts",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.14.2",
