@@ -11,7 +11,7 @@
         </p>
         <footer>
             <ul class="buttons vertical">
-                <li><a href="#discover" class="button fit scrolly">Discover <span style="font-weight: 600;">Track</span> <span style="font-weight: 300;">Share</span></a></li>
+                <li><a href="#discover" class="button fit scrolly">Discover <span style="font-weight: 600;">Tracks</span> <span style="font-weight: 300;">Now</span></a></li>
             </ul>
         </footer>
     </div>
@@ -23,16 +23,17 @@
 <!-- CTA -->
     <section id="cta">
         <header>
-<article id="discover">
+            <article id="discover">
+            <!-- Shows the button to post a playlist if a user is logged in -->
             {{#if userId}}
             <ul class="buttons">
                 <!-- <li><a href="#" class="button">Go to my profile</a></li> -->
                 <li><a href="/post" class="button">Post a Playlist</a></li>
                 <br>
                 <br>
-                <li>
+                {{!-- <li>
 
-                </li>
+                </li> --}}
             </ul>
             {{else}}
             <h5>It's easy to get started with <span style="font-weight: 600;">Track</span> <span style="font-weight: 300;">Share</span>! Simply log-in with your Spotify account and talk music.</h5>
@@ -41,13 +42,12 @@
             {{/if}}
         </header>
         {{#each threads}}
-            <div>
-                <a href="/thread{{this.id}}">{{this.title}} {{this.User.displayName}} {{this.genre}}</a>
-            </div>
+                <a href="/thread{{this.id}}" style="text-align:center; border-bottom: none"><div class="6u" style="border:1px solid white; color: white; margin-bottom:20px; display: inline-block"><span style="font-size:26px">{{this.title}}</span><br> <span style="font-size:14px">{{this.User.displayName}}</span><br><span style="font-size:14px">Genre: {{this.genre}}</span></div></a>
+            
         {{/each}}
-        <footer>
+        {{!-- <footer>
             
             </ul>
-        </footer>
+        </footer> --}}
     </section>
-</article>
+        </article>

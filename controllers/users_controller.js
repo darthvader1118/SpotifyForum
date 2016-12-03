@@ -1,24 +1,18 @@
 var express = require('express');
 var SpotifyWebApi = require('spotify-web-api-node');
 var router = express.Router();
-// var userObj = require('../server.js');
-// var userId = '1227705456';
-// var spotifyApi = userObj.spotifyApi;
-// var userId = require('../server.js');
-// var userId = localStorage.getItem('UserId');
-// console.log(userId);
-// console.log(server);
-// var spotifyApi = server.getPlaylists(userId);
+// var userId = require('../server.js');  didn't work
 
 var User = require('../models')["User"];
 var Thread = require('../models')["Thread"];
 var Comment = require('../models')["Comment"];
-// var Like = require('../models')["Like"];
 
 router.get('/', function(req, res) {
   res.redirect('/index');
 });
 
+
+//MOVED TO SERVER.JS FOR NOW
 //Displays all threads on home page
 //Passes an object containing all threads to home.handlebars
 // router.get('/index', function(req, res) {
@@ -30,6 +24,8 @@ router.get('/', function(req, res) {
 //   });
 // });
 
+
+//MOVED TO SERVER.JS FOR NOW
 //Displays the post a thread form
 // router.get('/post', function(req, res) {
 //   // console.log("Req object: " + req);
@@ -41,21 +37,24 @@ router.get('/', function(req, res) {
   
 // });
 
+
+//NOT IN USE CURRENTLY
 //Displays threads on home page where genre is selectedGenre
 //Passes an object containing all threads with the selected genre to home.handlebars
-router.get('/index/:genre', function(req, res) {
-  var selectedGenre = req.body.genre;
-  Thread.findAll({
-    where: {
-      genre: selectedGenre
-    }
-  }).then(function(result) {
-    var threadsObject = {threads: result};
-    res.render('home', threadsObject);
-  });
-});
+// router.get('/index/:genre', function(req, res) {
+//   var selectedGenre = req.body.genre;
+//   Thread.findAll({
+//     where: {
+//       genre: selectedGenre
+//     }
+//   }).then(function(result) {
+//     var threadsObject = {threads: result};
+//     res.render('home', threadsObject);
+//   });
+// });
 
 
+//MOVED TO SERVER.JS FOR NOW
 // //Displays thread contents and all comments on thread page
 // //Passes two objects, one containing the thread and one containing that thread's comments to thread.handlebars
 // router.get('/thread:id', function(req, res) {
@@ -79,6 +78,8 @@ router.get('/index/:genre', function(req, res) {
 //   });
 // });
 
+
+//NOT IN USE CURRENTLY
 //Displays profile info and created threads and liked threads on profile page
 //Passes three objects, one containing the user info, one containing created threads and one containing liked threads to profile.handlebars
 // router.get('/user/:id', function(req, res) {
@@ -107,6 +108,7 @@ router.get('/index/:genre', function(req, res) {
 // });
 
 
+//NOT IN USE CURRENTLY: Using Spotify login instead
 //Adds a new user to the Users table when a user signs up
 // router.post('/user/create', function(req, res) {
 //   var newUser = req.body;
@@ -155,8 +157,8 @@ router.post('/thread:id/comment/create', function(req, res) {
   });
 });
 
-
+//NOT IN USE CURRENTLY
 //Adds a like relationship to the Likes table when a user likes a thread
-  // currentUser.addThread(threadID);  //This might be addLikedThread
+// currentUser.addThread(threadID);  //This might be addLikedThread
 
-  module.exports = router;
+module.exports = router;
