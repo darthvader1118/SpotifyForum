@@ -185,7 +185,7 @@ app.get('/callback', function(req, res) {
                 displayName: body.display_name,
                 userUri: body.uri
               }).then(function(result) {
-                res.redirect('/#' +
+                res.redirect('http://trackshareproject.herokuapp.com/index/#' +
                 querystring.stringify({
                   access_token: access_token,
                   refresh_token: refresh_token
@@ -194,7 +194,7 @@ app.get('/callback', function(req, res) {
             }
               else{
                 //add some stuff here
-                res.redirect('/#' +
+                res.redirect('http://trackshareproject.herokuapp.com/index/#' +
                 querystring.stringify({
                   access_token: access_token,
                   refresh_token: refresh_token
