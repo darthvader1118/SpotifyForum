@@ -277,7 +277,7 @@ app.get('/thread:id', function(req, res) {
 app.get('/logout', function(req, res) {
   userId = "";
   res.redirect('/index');
-}
+});
 
 var port = process.env.PORT || 3000;
 app.listen(port, function() {
