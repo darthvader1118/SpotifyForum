@@ -3,19 +3,25 @@
 <section id="banner">
     <h2>{{thread.title}}</h2>
     
+    <!-- Spotify web player -->
     <iframe src="https://embed.spotify.com/?uri={{thread.threadUri}}" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
     <br/>
+
+    <!-- Opens the Spotify app and opens the playlist there -->
     <a href="{{thread.threadUri}}" class="button" style="margin: 20px">Download to Spotify</a>
 
     <p class="container 50%" style="margin-top:2em; margin-bottom:4em">{{thread.contents}}</p>
 
     <section class="special container 50%">
 
+        <!-- Shows the form to post a comment if someone is logged in -->
+        {{#if userId}}
         <form action="thread{{thread.id}}/comment/create" method="POST">
             <textarea name="contents" rows="2" placeholder="Write a comment!" style="color: white"></textarea>
             <input type="hidden" name="userID" value="{{userId}}"/>
             <input type="submit" style="margin: 20px" class="special" value="Post comment" />
         </form>
+        {{/if}}
     <ul>
         {{#each comments}}
         <li style="border: 1px solid black; margin-bottom: 10px; background-color: white">
