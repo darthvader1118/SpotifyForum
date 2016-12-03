@@ -204,14 +204,6 @@ app.get('/callback', function(req, res) {
             // project will be the first entry of the Projects table with the title 'aProject' || null
           })
 
-        // Moved to Sequelize promise so that the redirect would recognize the user
-        // we can also pass the token to the browser to make requests from there
-        // res.redirect('/#' +
-        //   querystring.stringify({
-        //     access_token: access_token,
-        //     refresh_token: refresh_token
-        //   }));
-
       } else {
         res.redirect('/#' +
           querystring.stringify({
