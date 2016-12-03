@@ -28,9 +28,11 @@
             <p></p>
         </header>
         {{#each threads}}
-            <div>
-                <a href="/thread/{{this.id}}">{{this.title}} {{this.UserId}} {{this.genre}}</a>
-            </div>
+                <a href="thread.handlebars">
+                <div>
+                    <a href="/thread/{{this.id}}">{{this.title}} {{this.UserId}} {{this.genre}}</a>
+                </div>
+                </a>
         {{/each}}
         <footer>
             <ul class="buttons">
