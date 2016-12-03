@@ -3,7 +3,7 @@
 <section id="banner">
     <article id="main">
         <header class="special container">
-            <span class="icon fa-envelope"></span>
+            <span class="icon fa-plus"></span>
             <h2>Post a Playlist</h2>
             <p>Give your playlist a name and description, then choose it from your account library</p>
         </header>
@@ -17,34 +17,28 @@
                             <input type="text" name="title" placeholder="Playlist Name" style="color: grey" />
                         </div>
                     </div>
-                    {{!-- <div class="row">
-                        <div class="12u">
-                            <input type="text" name="userID" placeholder="User ID" style="color: grey" />
-                        </div>
-                    </div> --}}
+
                     <input type="hidden" name="userID" value="{{userId}}">
+
                     <div class="row">
                         <div class="12u">
-                            <input type="textarea" name="contents" placeholder="Playlist Description" rows="2" style="color: grey"></textarea>
+                            <textarea name="contents" placeholder="Playlist Description" rows="2" style="color: grey"></textarea>
                         </div>
                     </div>
+
                     <div class="row">
                         <div class="12u">
                             <input type="text" name="genre" placeholder="Playlist Genre" style="color: grey" />
                         </div>
                     </div>
-                    {{!-- <div class="row">
-                        <div class="12u">
-                            <input type="text" name="uri" placeholder="Temp" style="color: grey" />
-                        </div>
-                    </div> --}}
 
                     <div class="row">
                         <div class="12u">
+                            <label for="playlists" style="color:black">Your Playlists:</label>
                             <ul class="buttons">
                                 {{#each playlists}}
                                 <li style="color: black">
-                                    <input type="radio" class="special" name="uri" value="{{this.uri}}" >{{this.name}}</input>
+                                    <input type="radio" class="special" id="playlists" name="uri" value="{{this.uri}}" >{{this.name}}</input>
                                 </li>
                                 {{/each}}
                             </ul>
@@ -60,6 +54,7 @@
                             </ul>
                         </div>
                     </div>
+
                 </form>
             </div>
         </section>
