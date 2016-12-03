@@ -7,7 +7,7 @@ var models = require('./models/');
 models.sequelize.sync({force: true});
 var app = express();
 var path = require('path');
-var userId;
+var userId = "";
 var playlists;
 
 var User = require('./models')["User"];
@@ -272,6 +272,12 @@ app.get('/thread:id', function(req, res) {
     })
   });
 });
+
+//For logging out
+app.get('/logout', function(req, res) {
+  userId = "";
+  res.redirect('/index');
+}
 
 var port = process.env.PORT || 3000;
 app.listen(port, function() {
