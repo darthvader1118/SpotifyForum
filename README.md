@@ -4,7 +4,7 @@ TrackShare is a music sharing forum for Spotify where users can share playlists 
 ###http://trackshareproject.herokuapp.com/
 
 
-![alt tag](url: https://github.com/darthvader1118/SpotifyForum/blob/master/Screenshots/Screen%20Shot%202016-12-03%20at%2010.15.46%20AM.png)
+![alt tag](https://github.com/darthvader1118/SpotifyForum/blob/master/Screenshots/Screen%20Shot%202016-12-03%20at%2010.15.46%20AM.png)
 
 
 
